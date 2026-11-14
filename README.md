@@ -321,9 +321,10 @@ What you can type, in this order, when booking:
 The menu also offers: all appointments in time order, appointments of one professional,
 appointments of one patient, a symptom keyword search, cancelling one appointment by
 professional ID + time, cancelling all appointments of a patient, a reference screen
-listing the staff and the bookable times, and **option 9, which loads the six example
-bookings from `AssignmentOne`** so the lists, filters and cancellations have something to
-work on without typing them in by hand.
+listing the staff and the bookable times, and **option 9, which previews the six example
+bookings from `AssignmentOne`**. The preview is built in a throw-away manager and is
+printed only: those examples never enter your own list and are never saved, so booking a
+real patient afterwards leaves exactly one appointment in `appointments.txt`.
 
 Two deliberate design points:
 

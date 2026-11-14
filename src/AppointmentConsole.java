@@ -99,7 +99,7 @@ public class AppointmentConsole {
                     case 6 -> cancelOneAppointment();
                     case 7 -> cancelPatientAppointments();
                     case 8 -> showReference();
-                    case 9 -> loadSampleBookings();
+                    case 9 -> showSampleBookings();
                     default -> System.out.println("  Please type a number from 0 to 9.");
                 }
             }
@@ -255,7 +255,7 @@ public class AppointmentConsole {
         System.out.println(" 6. Cancel one appointment (professional ID + time)");
         System.out.println(" 7. Cancel all appointments of one patient (by mobile)");
         System.out.println(" 8. Show the professionals and the clinic timetable");
-        System.out.println(" 9. Load the demonstration's example bookings (fills the list)");
+        System.out.println(" 9. Preview the demonstration's example bookings (not added to your list)");
         System.out.println(" 0. Exit");
     }
 
@@ -379,53 +379,54 @@ public class AppointmentConsole {
     }
 
     /**
-     * Loads the six example bookings used by the graded demonstration.
+     * Shows the six example bookings used by the graded demonstration.
      *
-     * <p>The desk starts with whatever was saved last time, which may be nothing.
-     * That is right for a real front desk but can leave nothing to list, filter
-     * or cancel. This option fills it with the same appointments
-     * {@link AssignmentOne} books, using the same classes and the same
-     * validation, so every other menu entry can be tried straight away.</p>
+     * <p>This is a <em>preview</em>: the examples are booked into a throw-away
+     * manager, printed, and then discarded. They never enter the desk's own
+     * collection and are never written to {@link #DATA_FILE}, so a user who only
+     * wants to see what the demonstration books does not end up with six
+     * strangers in their appointment list.</p>
      */
-    private static void loadSampleBookings() {
+    private static void showSampleBookings() {
+        AppointmentManager exampleDesk = new AppointmentManager();
+        addExample(exampleDesk, "Tom Wilson", "0400 111 222", 101, "09:00", "headache and fever");
+        addExample(exampleDesk, "Lisa Hall", "0400 777 888", 102, "09:00", "sore throat");
+        addExample(exampleDesk, "Sarah Moore", "0400 333 444", 301, "14:00", "knee pain");
+        addExample(exampleDesk, "James Clark", "0400 555 666", 201, "11:00", "wound dressing change");
+        addExample(exampleDesk, "Eva Brown", "0400 999 000", 103, "08:30", "blood pressure review");
+        // Lisa books a second appointment with a different professional, exactly
+        // as the graded demonstration does.
+        addExample(exampleDesk, "Lisa Hall", "0400 777 888", 401, "12:00", "dietary advice");
+        exampleDesk.sortAllAppointments();
+
         System.out.println();
-        System.out.println("--- Loading the demonstration's example bookings ---");
-        bookSample("Tom Wilson", "0400 111 222", 101, "09:00", "headache and fever");
-        bookSample("Lisa Hall", "0400 777 888", 102, "09:00", "sore throat");
-        bookSample("Sarah Moore", "0400 333 444", 301, "14:00", "knee pain");
-        bookSample("James Clark", "0400 555 666", 201, "11:00", "wound dressing change");
-        bookSample("Eva Brown", "0400 999 000", 103, "08:30", "blood pressure review");
-        // Lisa books a second appointment with a different professional, so the
-        // "cancel every appointment of one patient" option has something to do.
-        bookSample("Lisa Hall", "0400 777 888", 401, "12:00", "dietary advice");
-        saveBookings();
-        System.out.println("  " + manager.getAppointmentCount()
-                + " appointment(s) now in the list.");
+        System.out.println("--- Example bookings from the graded demonstration (preview only) ---");
+        printAppointments("These are shown for reference and are NOT in your list",
+                exampleDesk.getAllAppointments());
+        System.out.println("  Your own list still holds " + manager.getAppointmentCount()
+                + " appointment(s).");
     }
 
     /**
-     * Books one of the sample appointments, printing the manager's reply.
+     * Books one preview appointment into the throw-away manager.
      *
-     * <p>Nothing is booked directly into the list: the call goes through
-     * {@link AppointmentManager#addAppointment(Patient, HealthProfessional,
-     * String, String)}, so a sample that clashes with what the user already
-     * typed is rejected with exactly the same warning a real booking gets.</p>
+     * <p>Even a preview goes through the normal constructor and the normal
+     * manager, so the printed examples obey the same rules as a real booking.</p>
      *
+     * @param desk           the temporary manager holding the preview
      * @param name           the patient's name
      * @param mobile         the patient's mobile number
      * @param professionalId the identifier of the professional being seen
      * @param timeSlot       the time of the appointment, "HH:mm"
      * @param symptom        what the patient reports
      */
-    private static void bookSample(String name, String mobile, int professionalId,
-                                   String timeSlot, String symptom) {
+    private static void addExample(AppointmentManager desk, String name, String mobile,
+                                   int professionalId, String timeSlot, String symptom) {
         HealthProfessional professional = findProfessionalById(professionalId);
         if (professional == null) {
-            System.out.println("  WARNING: there is no professional with ID " + professionalId + ".");
             return;
         }
-        System.out.println("  " + manager.addAppointment(
-                new Patient(name, mobile), professional, timeSlot, symptom));
+        desk.addAppointment(new Patient(name, mobile), professional, timeSlot, symptom);
     }
 
     /**
