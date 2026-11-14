@@ -1,0 +1,68 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "编译全部源码",
+            "type": "shell",
+            "command": "javac",
+            "args": [
+                "--release",
+                "17",
+                "-encoding",
+                "UTF-8",
+                "-Xlint:all",
+                "-d",
+                "bin",
+                "src\\*.java"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$javac"
+            ],
+            "group": "build"
+        },
+        {
+            "label": "运行自助挂号（可输入）",
+            "type": "shell",
+            "command": "java",
+            "args": [
+                "-cp",
+                "bin",
+                "AppointmentConsole"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "dependsOn": "编译全部源码",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "focus": true,
+                "panel": "dedicated",
+                "clear": true
+            }
+        },
+        {
+            "label": "运行作业演示（自动）",
+            "type": "shell",
+            "command": "java",
+            "args": [
+                "-cp",
+                "bin",
+                "AssignmentOne"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "dependsOn": "编译全部源码",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "clear": true
+            }
+        }
+    ]
+}

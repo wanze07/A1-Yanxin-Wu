@@ -1,0 +1,12 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "自助挂号（可键盘输入）",
+            "request": "launch",
+            "mainClass": "AppointmentConsole",
+            "console": "integratedTerminal"
+        }
+    ]
+}

@@ -1,0 +1,100 @@
+﻿--------------------------------------------------------------------------
+ PROG2004 Assessment 1 - Health Service Appointment System
+--------------------------------------------------------------------------
+
+PART 3 - Health professionals working in the clinic
+  1. [General Practitioner] ID: 101, Name: Dr Alice Smith, Works: Monday/Wednesday/Friday | Clinic: City Medical Clinic
+  2. [General Practitioner] ID: 102, Name: Dr Bob Lee, Works: Tuesday/Thursday | Clinic: Suburb Family Clinic
+  3. [General Practitioner] ID: 103, Name: Dr Carol Ng, Works: Monday/Tuesday/Wednesday/Thursday/Friday | Clinic: Riverside Family Clinic
+  4. [Nurse] ID: 201, Name: Clara Brown, Works: Monday/Tuesday | Ward: Emergency Ward
+  5. [Nurse] ID: 202, Name: Ben Carter, Works: Tuesday/Wednesday/Thursday | Ward: Outpatient Ward
+  6. [Surgeon] ID: 301, Name: Dr David Wong, Works: Monday/Tuesday/Wednesday | Specialty: Cardiac Surgery
+  7. [Dietitian] ID: 401, Name: Ms Eva Taylor, Works: Thursday/Friday | Focus area: Weight management
+  Total: 7 professionals
+
+PART 4 - One appointment, in full
+Appointment at 09:00
+    Patient : Tom Wilson (mobile 0400111222)
+    Reason  : headache and fever
+    With    : [General Practitioner] ID: 101, Name: Dr Alice Smith, Works: Monday/Wednesday/Friday | Clinic: City Medical Clinic
+
+PART 4 - The same appointment class holding a different type of professional
+Appointment at 14:00
+    Patient : Sarah Moore (mobile 0400333444)
+    Reason  : knee pain
+    With    : [Surgeon] ID: 301, Name: Dr David Wong, Works: Monday/Tuesday/Wednesday | Specialty: Cardiac Surgery
+
+PART 4 - Invalid objects are refused (error cases)
+  Appointment with time 25:00 rejected: Time slot must use the 24-hour format HH:mm, for example 09:30.
+  Appointment without a patient rejected: An appointment must have a patient.
+  Patient with mobile 0400 rejected: Patient mobile number must contain between 8 and 15 digits.
+  Patient with no name rejected: Patient name cannot be empty.
+
+PART 5/6 - Clinic timetable: 16 bookable slots, 08:00, 08:30, 09:00, 09:30, 10:00, 10:30, 11:00, 11:30, 12:00, 12:30, 13:00, 13:30, 14:00, 14:30, 15:00, 15:30
+
+PART 6 - Booking appointments (normal cases)
+SUCCESS: Appointment booked. 09:00 | Tom Wilson (0400111222) -> General Practitioner Dr Alice Smith [ID 101] | Reason: headache and fever
+SUCCESS: Appointment booked. 09:00 | Lisa Hall (0400777888) -> General Practitioner Dr Bob Lee [ID 102] | Reason: sore throat
+SUCCESS: Appointment booked. 14:00 | Sarah Moore (0400333444) -> Surgeon Dr David Wong [ID 301] | Reason: knee pain
+SUCCESS: Appointment booked. 11:00 | James Clark (0400555666) -> Nurse Clara Brown [ID 201] | Reason: wound dressing change
+SUCCESS: Appointment booked. 08:30 | Eva Brown (0400999000) -> General Practitioner Dr Carol Ng [ID 103] | Reason: blood pressure review
+SUCCESS: Appointment booked. 12:00 | Lisa Hall (0400777888) -> Dietitian Ms Eva Taylor [ID 401] | Reason: dietary advice
+
+PART 6 - Bookings that must be rejected (error cases)
+WARNING: Double booking rejected. Dr Alice Smith [ID 101] already has Tom Wilson booked at 09:00.
+WARNING: 10:15 is not a clinic time slot. Available times: 08:00, 08:30, 09:00, 09:30, 10:00, 10:30, 11:00, 11:30, 12:00, 12:30, 13:00, 13:30, 14:00, 14:30, 15:00, 15:30.
+WARNING: Cannot book an appointment without a patient.
+
+PART 5 - All appointments, as booked (not yet sorted)
+  1. 09:00 | Tom Wilson (0400111222) -> General Practitioner Dr Alice Smith [ID 101] | Reason: headache and fever
+  2. 09:00 | Lisa Hall (0400777888) -> General Practitioner Dr Bob Lee [ID 102] | Reason: sore throat
+  3. 14:00 | Sarah Moore (0400333444) -> Surgeon Dr David Wong [ID 301] | Reason: knee pain
+  4. 11:00 | James Clark (0400555666) -> Nurse Clara Brown [ID 201] | Reason: wound dressing change
+  5. 08:30 | Eva Brown (0400999000) -> General Practitioner Dr Carol Ng [ID 103] | Reason: blood pressure review
+  6. 12:00 | Lisa Hall (0400777888) -> Dietitian Ms Eva Taylor [ID 401] | Reason: dietary advice
+  Total: 6 appointment(s)
+
+PART 5 - All appointments, sorted earliest first
+  1. 08:30 | Eva Brown (0400999000) -> General Practitioner Dr Carol Ng [ID 103] | Reason: blood pressure review
+  2. 09:00 | Tom Wilson (0400111222) -> General Practitioner Dr Alice Smith [ID 101] | Reason: headache and fever
+  3. 09:00 | Lisa Hall (0400777888) -> General Practitioner Dr Bob Lee [ID 102] | Reason: sore throat
+  4. 11:00 | James Clark (0400555666) -> Nurse Clara Brown [ID 201] | Reason: wound dressing change
+  5. 12:00 | Lisa Hall (0400777888) -> Dietitian Ms Eva Taylor [ID 401] | Reason: dietary advice
+  6. 14:00 | Sarah Moore (0400333444) -> Surgeon Dr David Wong [ID 301] | Reason: knee pain
+  Total: 6 appointment(s)
+
+PART 5 - Appointments for professional ID 101 (Dr Alice Smith)
+  1. 09:00 | Tom Wilson (0400111222) -> General Practitioner Dr Alice Smith [ID 101] | Reason: headache and fever
+  Total: 1 appointment(s)
+
+PART 5 - Appointments for patient mobile 0400 777 888 (a subset, sorted)
+  1. 09:00 | Lisa Hall (0400777888) -> General Practitioner Dr Bob Lee [ID 102] | Reason: sore throat
+  2. 12:00 | Lisa Hall (0400777888) -> Dietitian Ms Eva Taylor [ID 401] | Reason: dietary advice
+  Total: 2 appointment(s)
+
+PART 5 - Appointments for professional ID 201 (Nurse Clara Brown): 1
+
+PART 6 - Cancelling one appointment (normal case)
+SUCCESS: Cancelled Sarah Moore's appointment with Dr David Wong at 14:00.
+
+PART 6 - Cancelling an appointment that does not exist (error case)
+WARNING: No appointment found for professional ID 999 at 10:00. Nothing was cancelled.
+
+PART 6 - Cancelling all appointments for one patient (by mobile)
+SUCCESS: Cancelled 2 appointment(s) for patient 0400 777 888.
+
+PART 6 - Cancelling again for the same patient (error case)
+WARNING: No appointments found for patient 0400 777 888. Nothing was cancelled.
+
+PART 6 - The collection after the cancellations
+  1. 08:30 | Eva Brown (0400999000) -> General Practitioner Dr Carol Ng [ID 103] | Reason: blood pressure review
+  2. 09:00 | Tom Wilson (0400111222) -> General Practitioner Dr Alice Smith [ID 101] | Reason: headache and fever
+  3. 11:00 | James Clark (0400555666) -> Nurse Clara Brown [ID 201] | Reason: wound dressing change
+  Total: 3 appointment(s)
+
+Summary
+  Health professionals: 7
+  Appointments still booked: 3
+--------------------------------------------------------------------------
+ End of demonstration
+--------------------------------------------------------------------------
