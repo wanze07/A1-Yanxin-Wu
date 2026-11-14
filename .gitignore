@@ -3,4 +3,5 @@ out/
 *.class
 .idea/
 *.iml
+appointments.txt
 .DS_Store

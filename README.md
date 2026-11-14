@@ -302,8 +302,14 @@ hide it. If you start `AssignmentOne` and see no prompts, that is expected — i
 scripted version. Press `F5` (or run the task `运行自助挂号（可输入）`) to type your own
 details.
 
-What you can type, in this order, when booking:
+Everything you book is saved as soon as it changes: the desk writes every appointment to
+`appointments.txt` in the project folder, and reads it back the next time the program
+starts, so a long list of patients survives closing the window. The file is plain text
+(one line per appointment: name, mobile, professional ID, time, symptom) and it is
+git-ignored; delete it to start from an empty desk. Choose **2** to print every appointment
+you have entered, earliest first.
 
+What you can type, in this order, when booking:
 | Prompt | Example | Why it is asked there |
 |---|---|---|
 | Patient name | `Tom Wilson` | Stored by `Patient`, which rejects a blank name. |

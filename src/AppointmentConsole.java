@@ -1,4 +1,10 @@
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -37,6 +43,16 @@ public class AppointmentConsole {
     private static final String LINE =
             "--------------------------------------------------------------------------";
 
+    /**
+     * Where the bookings are kept between runs.
+     *
+     * <p>Created next to the project, so the desk still has its appointments
+     * after the window is closed. The file is plain text on purpose: it is easy
+     * to read, and it never decides anything - every restored booking goes back
+     * through the same validation as a typed one.</p>
+     */
+    private static final String DATA_FILE = "appointments.txt";
+
     /** The clinic staff, created once when the program starts. */
     private static ArrayList<HealthProfessional> professionals;
 
@@ -51,6 +67,7 @@ public class AppointmentConsole {
     public static void main(String[] args) {
         manager = new AppointmentManager();
         professionals = createProfessionals();
+        int restored = loadSavedBookings();
 
         System.out.println(LINE);
         System.out.println(" HEALTH SERVICE - APPOINTMENT DESK");
@@ -58,6 +75,12 @@ public class AppointmentConsole {
                 + " slots between 08:00 and 16:00, every 30 minutes");
         System.out.println(" Type your answer after each prompt, then press Enter.");
         System.out.println(" Press Enter on an empty line at any prompt to cancel that step.");
+        if (restored > 0) {
+            System.out.println(" Restored " + restored + " appointment(s) from " + DATA_FILE + ".");
+        } else {
+            System.out.println(" No saved appointments yet; everything you book is kept in "
+                    + DATA_FILE + ".");
+        }
         System.out.println(LINE);
 
         boolean running = true;
@@ -87,9 +110,110 @@ public class AppointmentConsole {
             System.out.println("No more input - the desk is closing.");
         }
 
+        saveBookings();
         System.out.println();
         System.out.println("Desk closed. " + manager.getAppointmentCount()
                 + " appointment(s) still booked for today.");
+    }
+
+    /**
+     * Reads the bookings left behind by an earlier run.
+     *
+     * <p>Each line holds five fields separated by {@code |}: name, mobile,
+     * professional ID, time slot and symptom. A line that no longer parses is
+     * skipped rather than trusted, and every accepted booking is created through
+     * the normal constructor and manager, so a saved file can never put the desk
+     * into a state a typed booking could not reach.</p>
+     *
+     * @return how many appointments were restored
+     */
+    private static int loadSavedBookings() {
+        Path file = Paths.get(DATA_FILE);
+        if (!Files.exists(file)) {
+            return 0;
+        }
+        int restored = 0;
+        try {
+            List<String> lines = Files.readAllLines(file, StandardCharsets.UTF_8);
+            for (int i = 0; i < lines.size(); i++) {
+                String line = lines.get(i).trim();
+                if (line.isEmpty()) {
+                    continue;
+                }
+                String[] parts = line.split("\\|", -1);
+                if (parts.length != 5) {
+                    continue;
+                }
+                HealthProfessional professional = findProfessionalById(parseId(parts[2]));
+                if (professional == null) {
+                    continue;
+                }
+                try {
+                    Patient patient = new Patient(parts[0], parts[1]);
+                    String reply = manager.addAppointment(
+                            patient, professional, parts[3], parts[4]);
+                    if (reply.startsWith("SUCCESS")) {
+                        restored++;
+                    }
+                } catch (IllegalArgumentException damagedLine) {
+                    // One damaged line must not stop the desk from opening.
+                }
+            }
+        } catch (IOException error) {
+            System.out.println("  (could not read " + DATA_FILE + ": " + error.getMessage() + ")");
+            return 0;
+        }
+        return restored;
+    }
+
+    /**
+     * Writes every current booking back to {@link #DATA_FILE}.
+     *
+     * <p>Called after anything that changes the collection, so the file always
+     * mirrors what the desk is holding; a cancelled appointment disappears from
+     * it at the same moment it disappears from memory.</p>
+     */
+    private static void saveBookings() {
+        ArrayList<Appointment> appointments = manager.getAllAppointments();
+        StringBuilder text = new StringBuilder();
+        for (int i = 0; i < appointments.size(); i++) {
+            Appointment appointment = appointments.get(i);
+            text.append(clean(appointment.getPatient().getName())).append('|')
+                    .append(clean(appointment.getPatient().getMobile())).append('|')
+                    .append(appointment.getHealthProfessional().getProfessionalId()).append('|')
+                    .append(appointment.getTimeSlot()).append('|')
+                    .append(clean(appointment.getSymptom()))
+                    .append(System.lineSeparator());
+        }
+        try {
+            Files.write(Paths.get(DATA_FILE), text.toString().getBytes(StandardCharsets.UTF_8));
+        } catch (IOException error) {
+            System.out.println("  (could not save " + DATA_FILE + ": " + error.getMessage() + ")");
+        }
+    }
+
+    /**
+     * Makes a value safe to store in one field of the save file.
+     *
+     * @param value the text typed by the user
+     * @return the same text with separators and line breaks replaced
+     */
+    private static String clean(String value) {
+        return value.replace('|', '/').replace('\n', ' ').replace('\r', ' ');
+    }
+
+    /**
+     * Reads an identifier from the save file without throwing.
+     *
+     * @param text the stored field
+     * @return the number, or -1 when the field is not a number
+     */
+    private static int parseId(String text) {
+        try {
+            return Integer.parseInt(text.trim());
+        } catch (NumberFormatException error) {
+            return -1;
+        }
     }
 
     /**
@@ -181,7 +305,11 @@ public class AppointmentConsole {
             return;
         }
 
-        System.out.println(manager.addAppointment(patient, professional, timeSlot, symptom));
+        String reply = manager.addAppointment(patient, professional, timeSlot, symptom);
+        System.out.println(reply);
+        if (reply.startsWith("SUCCESS")) {
+            saveBookings();
+        }
     }
 
     /**
@@ -253,10 +381,11 @@ public class AppointmentConsole {
     /**
      * Loads the six example bookings used by the graded demonstration.
      *
-     * <p>The desk starts empty, which is right for a real front desk but leaves
-     * nothing to list, filter or cancel. This option fills it with the same
-     * appointments {@link AssignmentOne} books, using the same classes and the
-     * same validation, so every other menu entry can be tried straight away.</p>
+     * <p>The desk starts with whatever was saved last time, which may be nothing.
+     * That is right for a real front desk but can leave nothing to list, filter
+     * or cancel. This option fills it with the same appointments
+     * {@link AssignmentOne} books, using the same classes and the same
+     * validation, so every other menu entry can be tried straight away.</p>
      */
     private static void loadSampleBookings() {
         System.out.println();
@@ -269,6 +398,7 @@ public class AppointmentConsole {
         // Lisa books a second appointment with a different professional, so the
         // "cancel every appointment of one patient" option has something to do.
         bookSample("Lisa Hall", "0400 777 888", 401, "12:00", "dietary advice");
+        saveBookings();
         System.out.println("  " + manager.getAppointmentCount()
                 + " appointment(s) now in the list.");
     }
@@ -470,6 +600,7 @@ public class AppointmentConsole {
             return;
         }
         System.out.println(manager.cancelAppointment(identifier, time));
+        saveBookings();
     }
 
     /**
@@ -481,6 +612,7 @@ public class AppointmentConsole {
             return;
         }
         System.out.println(manager.cancelAppointmentsForPatient(mobile));
+        saveBookings();
     }
 
     /**
