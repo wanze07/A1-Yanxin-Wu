@@ -259,6 +259,9 @@ of it — the brief warns that an interview may be requested.
 - [ ] GitHub repository created; code committed **progressively** (see the commit plan
       below), with the repository link added to the submission comments. If private,
       invite the tutor and unit assessor as collaborators.
+
+Repository used for this submission: <https://github.com/wanze07/A1-Yanxin-Wu> (public,
+branch `main`, one commit per Part so the progression is visible).
 - [ ] WakaTime report screenshot/PDF attached (`A1-username-WakaTime.png`).
 - [ ] Video (≤ 5 minutes) uploaded to SCU OneDrive, shareable link added to comments.
 - [ ] GenAI declaration added to the comments.
