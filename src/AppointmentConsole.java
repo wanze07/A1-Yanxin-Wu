@@ -26,7 +26,7 @@ import java.util.Scanner;
  * {@link AppointmentManager} - so the console contains no business rules of its
  * own and cannot disagree with the system it is driving.</p>
  *
- * @author Student Name
+ * @author Yanxin Wu
  * @version 1.0
  */
 public class AppointmentConsole {

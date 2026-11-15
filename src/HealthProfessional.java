@@ -16,7 +16,7 @@ import java.util.ArrayList;
  * into an invalid state - the only way in is through a constructor that
  * validates its arguments.</p>
  *
- * @author Student Name
+ * @author Yanxin Wu
  * @version 1.0
  */
 public abstract class HealthProfessional {
@@ -55,8 +55,7 @@ public abstract class HealthProfessional {
 
         // Copy the arguments into our own list and drop duplicates, so the
         // object owns its data and cannot be changed from the outside.
-        for (int i = 0; i < workingDays.length; i++) {
-            Weekday day = workingDays[i];
+        for (Weekday day : workingDays) {
             if (day == null) {
                 throw new IllegalArgumentException("A working day cannot be null.");
             }

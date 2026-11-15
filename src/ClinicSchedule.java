@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * alphabetical order is also chronological order; that is what lets
  * {@link Appointment} sort itself without parsing anything.</p>
  *
- * @author Student Name
+ * @author Yanxin Wu
  * @version 1.0
  */
 public class ClinicSchedule {

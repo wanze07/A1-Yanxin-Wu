@@ -6,7 +6,7 @@
  * from passing "Fridy" or "sunday" and every professional is described in
  * exactly the same vocabulary.</p>
  *
- * @author Student Name
+ * @author Yanxin Wu
  * @version 1.0
  */
 public enum Weekday {

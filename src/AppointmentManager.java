@@ -15,7 +15,7 @@ import java.util.Collections;
  * <p>One manager represents one clinic day; the brief limits bookings to the
  * current day, so no date is stored.</p>
  *
- * @author Student Name
+ * @author Yanxin Wu
  * @version 1.0
  */
 public class AppointmentManager {

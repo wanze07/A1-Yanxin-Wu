@@ -5,7 +5,7 @@
  * <p>Reuses the shared data of {@link HealthProfessional} and adds the one
  * piece of information that identifies a dietitian.</p>
  *
- * @author Student Name
+ * @author Yanxin Wu
  * @version 1.0
  */
 public class Dietitian extends HealthProfessional {

@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * follow the demonstration from start to finish. Helper methods keep the main
  * method short and avoid repeating the same printing loop at every step.</p>
  *
- * @author Student Name
+ * @author Yanxin Wu
  * @version 1.0
  */
 public class AssignmentOne {
@@ -221,25 +221,31 @@ public class AssignmentOne {
         System.out.println("PART 4 - Invalid objects are refused (error cases)");
 
         try {
-            new Appointment(new Patient("Amy Turner", "0400 666 777"), findProfessional(professionals, 401), "25:00");
+            Appointment created = new Appointment(new Patient("Amy Turner", "0400 666 777"),
+                    findProfessional(professionals, 401), "25:00");
+            System.out.println("  Unexpected: 25:00 was accepted as " + created.getSummary());
         } catch (IllegalArgumentException error) {
             System.out.println("  Appointment with time 25:00 rejected: " + error.getMessage());
         }
 
         try {
-            new Appointment(null, professionals.get(0), "10:00");
+            Appointment created = new Appointment(null, professionals.get(0), "10:00");
+            System.out.println("  Unexpected: a missing patient was accepted as "
+                    + created.getSummary());
         } catch (IllegalArgumentException error) {
             System.out.println("  Appointment without a patient rejected: " + error.getMessage());
         }
 
         try {
-            new Patient("Amy Turner", "0400");
+            Patient created = new Patient("Amy Turner", "0400");
+            System.out.println("  Unexpected: mobile 0400 was accepted for " + created.getName());
         } catch (IllegalArgumentException error) {
             System.out.println("  Patient with mobile 0400 rejected: " + error.getMessage());
         }
 
         try {
-            new Patient("", "0400 666 777");
+            Patient created = new Patient("", "0400 666 777");
+            System.out.println("  Unexpected: an empty name was accepted for " + created.getMobile());
         } catch (IllegalArgumentException error) {
             System.out.println("  Patient with no name rejected: " + error.getMessage());
         }

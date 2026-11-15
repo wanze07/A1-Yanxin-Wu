@@ -6,7 +6,7 @@
  * days) comes from {@link HealthProfessional}; the only thing this class adds is
  * the clinic the doctor practises at.</p>
  *
- * @author Student Name
+ * @author Yanxin Wu
  * @version 1.0
  */
 public class GeneralPractitioner extends HealthProfessional {

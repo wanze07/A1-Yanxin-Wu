@@ -14,7 +14,7 @@
  * Because times use the fixed-width {@code "HH:mm"} format, comparing the
  * strings as text gives exactly the right order - no parsing is needed.</p>
  *
- * @author Student Name
+ * @author Yanxin Wu
  * @version 1.0
  */
 public class Appointment implements Comparable<Appointment> {

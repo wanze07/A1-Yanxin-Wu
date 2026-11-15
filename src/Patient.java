@@ -8,7 +8,7 @@
  * and every cancellation. It also gives Part 5 a natural way to decide whether
  * two appointments belong to the same person.</p>
  *
- * @author Student Name
+ * @author Yanxin Wu
  * @version 1.0
  */
 public class Patient {

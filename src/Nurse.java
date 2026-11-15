@@ -5,7 +5,7 @@
  * <p>Reuses the shared data of {@link HealthProfessional} and adds the one
  * piece of information that makes a nurse different from a doctor.</p>
  *
- * @author Student Name
+ * @author Yanxin Wu
  * @version 1.0
  */
 public class Nurse extends HealthProfessional {
