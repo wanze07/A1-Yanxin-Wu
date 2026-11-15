@@ -3,7 +3,7 @@
     "configurations": [
         {
             "type": "java",
-            "name": "自助挂号（可键盘输入）",
+            "name": "Front desk (keyboard input)",
             "request": "launch",
             "mainClass": "AppointmentConsole",
             "console": "integratedTerminal"

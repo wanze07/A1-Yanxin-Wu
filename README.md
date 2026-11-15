@@ -43,14 +43,17 @@ A1-Yanxin Wu/
 ## 2. How to run
 
 No helper script is needed - everything runs from VS Code itself. The three tasks in
-`.vscode/tasks.json` are labelled in Chinese; the launch configuration is **自助挂号（可键盘输入）**:
+`.vscode/tasks.json` are **Build all sources**, **Run front desk (typing)** and
+**Run assignment demo (automatic)**; the launch configuration is
+**Front desk (keyboard input)**.
 
-* **Press `F5`** - starts `AppointmentConsole`, the typing version, in the integrated
-  terminal. The cursor stops at `Your choice:` and waits for you.
-* **Ctrl+Shift+P -> `Tasks: Run Task` -> `运行自助挂号（可输入）`** - compiles every
+* **Press `F5`** - starts `AppointmentConsole` through the **Front desk (keyboard input)**
+  configuration, in the integrated terminal. The cursor stops at `Your choice:` and waits
+  for you.
+* **Ctrl+Shift+P -> `Tasks: Run Task` -> `Run front desk (typing)`** - compiles every
   source file into `bin` (through its `dependsOn`), then runs the same program. Pick
-  `运行作业演示（自动）` instead when you want the scripted Part 6 demonstration.
-* **Ctrl+Shift+B** - runs the default build task `编译全部源码`, no run.
+  `Run assignment demo (automatic)` instead when you want the scripted Part 6 demonstration.
+* **Ctrl+Shift+B** - runs the default build task `Build all sources`, no run.
 
 ### IntelliJ IDEA
 
@@ -104,8 +107,8 @@ of the Java Runtime only recognizes class file versions up to 69.0
 
 Compiling with `--release 17` produces version 61.0, which both the JDK 27 command line
 and the VS Code runtime accept. If the message ever returns, delete the `bin` folder and
-run the task `运行自助挂号（可输入）` (or `编译全部源码`), which always compiles with
-`--release 17`.
+run the task `Run front desk (typing)` (or `Build all sources`), which always compiles
+with `--release 17`.
 
 ---
 
@@ -312,7 +315,7 @@ to attach to the submission comments.
 book a real patient instead of reading the scripted demonstration. It is kept out of
 `AssignmentOne` on purpose: Part 6 asks for an automatic demonstration, and a menu would
 hide it. If you start `AssignmentOne` and see no prompts, that is expected — it is the
-scripted version. Press `F5` (or run the task `运行自助挂号（可输入）`) to type your own
+scripted version. Press `F5` (or run the task `Run front desk (typing)`) to type your own
 details.
 
 Everything you book is saved as soon as it changes: the desk writes every appointment to
