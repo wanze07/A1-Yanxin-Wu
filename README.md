@@ -277,6 +277,9 @@ branch `main`, code committed step by step so the progression is visible).
 - [ ] GenAI declaration added to the comments.
 - [ ] Submitted before Monday 16 November 2026, 11:59 pm
 
+**Video link (SCU OneDrive, sign-in with an SCU account required):**
+<https://scuonline-my.sharepoint.com/:v:/g/personal/y_wu_81_student_scu_edu_au/IQAsN_ZWn41iQpNwqZE9pU5gAVzaSePhUBTeIrk6LrjL2NU?e=keka5Z>
+
 ### Commit history in this repository (shows incremental progress)
 
 The code itself arrives in fifteen commits, one per working step rather than in a single
