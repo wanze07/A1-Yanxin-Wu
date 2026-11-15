@@ -266,9 +266,9 @@ of it — the brief warns that an interview may be requested.
 Repository used for this submission: <https://github.com/wanze07/A1-Yanxin-Wu> (public,
 branch `main`, code committed step by step so the progression is visible).
 
-- [ ] Project folder is named `A1-Yanxin Wu`; zip it as `A1-Yanxin-Wu.zip` containing
-  `src/`, `README.md`, `sample-output.txt`, `wakatime/A1-Yanxin-Wu-WakaTime.png`
-  (no `bin/`, no `.vscode/`, no `.idea/`, no `appointments.txt`).
+- [ ] Project folder is named A1-Yanxin Wu. Zip it as A1-Yanxin-Wu.zip containing the
+  src folder, README.md, sample-output.txt and the WakaTime screenshot, and leaving out
+  the build output, the VS Code and IDEA configuration folders and the runtime save file.
 - [ ] GitHub repository created; code committed **progressively** (see the commit history
   below), with the repository link added to the submission comments. If private,
   invite the tutor and unit assessor as collaborators.
