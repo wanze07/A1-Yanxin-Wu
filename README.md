@@ -276,7 +276,8 @@ branch `main`, code committed step by step so the progression is visible).
 
 ### Commit history in this repository (shows incremental progress)
 
-Fifteen commits, one per working step rather than a single upload:
+The code itself arrives in fifteen commits, one per working step rather than in a single
+upload; any later commits only touch this README:
 
 ```
 23568b7 Project setup: ignore build output
