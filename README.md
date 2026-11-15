@@ -1,21 +1,20 @@
 # PROG2004 Assessment 1 — Health Service Appointment System
 
-**Student:** Wu Yanxin (伍妍欣) · **Student ID:** 202400408045
-**Project:** A1-`<MySCU username>` · **Unit:** PROG2004 Object Oriented Programming
+**Student:** Wu Yanxin · **Student ID:** 25259450
+**Project:** A1-Yanxin Wu · **Unit:** PROG2004 Object Oriented Programming
 
 This project is the "backbone" of a small health-service booking system: a set of
-collaborating classes plus a scripted `main` method that proves the backbone works.
-The graded solution has no user interface, no menu, no log-in and no saved data, exactly
-as the brief requires. A separate, optional front desk that a person can type into is
-added on top of the same classes and described in section 8.
+collaborating classes plus a scripted `main` method that proves the backbone works. A
+separate, optional front desk that a person can type into is added on top of the same
+classes and is described in section 8.
 
 ---
 
 ## 1. Project structure
 
 ```
-oop作业/
-├── src/
+A1-Yanxin Wu/
+├── src/                          12 Java files, default package (no package statement)
 │   ├── Weekday.java               enum: the fixed set of working days
 │   ├── HealthProfessional.java    Part 1 - abstract base class (supertype)
 │   ├── GeneralPractitioner.java   Part 2 - required sub-type (adds clinic)
@@ -28,32 +27,37 @@ oop作业/
 │   ├── AppointmentManager.java    Part 5 - the collection and its operations
 │   ├── AssignmentOne.java         Part 3 + Part 6 - the graded demonstration (main)
 │   └── AppointmentConsole.java    extra - interactive desk you can type into
-├── .vscode/                       run configuration and build tasks for VS Code
-├── .idea/ + oop作业.iml            IntelliJ IDEA project (src already marked as sources)
+├── .vscode/                       launch configuration and the three build/run tasks
+├── .idea/ + A1-Yanxin Wu.iml      IntelliJ IDEA project (src marked as sources, output in out/)
+├── wakatime/A1-Yanxin-Wu-WakaTime.png   WakaTime dashboard screenshot for the submission
+├── appointments.txt               created at run time by the desk, git-ignored
 ├── sample-output.txt              output of the scripted demonstration (for the report)
 ├── .gitignore
 └── README.md
 ```
 
+`bin/` and `out/` are compiler output and are git-ignored; nothing hand-written lives there.
+
 ---
 
 ## 2. How to run
 
-No helper script is needed - everything runs from VS Code itself:
+No helper script is needed - everything runs from VS Code itself. The three tasks in
+`.vscode/tasks.json` are labelled in Chinese; the launch configuration is **自助挂号（可键盘输入）**:
 
 * **Press `F5`** - starts `AppointmentConsole`, the typing version, in the integrated
   terminal. The cursor stops at `Your choice:` and waits for you.
-* **Ctrl+Shift+P -> `TASKS: Run Task` -> `运行自助挂号（可输入）`** - compiles every source
-  file into `bin`, then runs the same program. Pick `运行作业演示（自动）` instead when you
-  want the scripted Part 6 demonstration.
-* **Ctrl+Shift+B** - build only (task `编译全部源码`), no run.
+* **Ctrl+Shift+P -> `Tasks: Run Task` -> `运行自助挂号（可输入）`** - compiles every
+  source file into `bin` (through its `dependsOn`), then runs the same program. Pick
+  `运行作业演示（自动）` instead when you want the scripted Part 6 demonstration.
+* **Ctrl+Shift+B** - runs the default build task `编译全部源码`, no run.
 
 ### IntelliJ IDEA
 
-The folder is a ready-made IDEA project: `oop作业.iml` marks `src` as the sources root and
+The folder is a ready-made IDEA project: `A1-Yanxin Wu.iml` marks `src` as the sources root and
 compiled classes go to `out/`, so nothing has to be configured by hand.
 
-1. `File -> Open` and choose the `oop作业` folder (open the folder itself, not `src`).
+1. `File -> Open` and choose the **`A1-Yanxin Wu`** folder (open the folder itself, not `src`).
 2. The first time, IDEA may ask for an SDK: pick any JDK **17 or newer** (this machine has
    JDK 27, so `27` is fine).
 3. Open `src/AppointmentConsole.java`, click the green arrow next to
@@ -74,7 +78,7 @@ stay in sync:
 Command line, if you prefer the terminal:
 
 ```
-javac --release 17 -d bin src\*.java
+javac --release 17 -encoding UTF-8 -Xlint:all -d bin "src\*.java"
 java -cp bin AppointmentConsole
 ```
 
@@ -100,8 +104,8 @@ of the Java Runtime only recognizes class file versions up to 69.0
 
 Compiling with `--release 17` produces version 61.0, which both the JDK 27 command line
 and the VS Code runtime accept. If the message ever returns, delete the `bin` folder and
-let VS Code rebuild it, or run a task (`运行自助挂号（可输入）` / `运行作业演示（自动）`),
-which always compile with `--release 17`.
+run the task `运行自助挂号（可输入）` (or `编译全部源码`), which always compiles with
+`--release 17`.
 
 ---
 
@@ -134,23 +138,23 @@ HealthProfessional ──┴──► Appointment (implements Comparable)
 
 ### Part 1 — Modelling a health professional
 
-| Design question in the brief | Decision and why |
-|---|---|
-| What is genuinely common to all professionals? | The numeric ID, the name and the working days. Those three fields live in `HealthProfessional`; anything else (clinic, ward, specialty, focus area) is pushed down to the sub-type, because it is not true of every professional. |
-| The working days are "a fixed collection of values" — how to store them? | In an `enum`, `Weekday`. Free-text days would let a caller write "Fridy" or "MONDAY" and the timetable would silently disagree with the roster; an enum makes the set of legal values part of the type, and it keeps the printing consistent. |
+| Design question in the brief                                                        | Decision and why                                                                                                                                                                                                                                                                                                                                                                         |
+| ----------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| What is genuinely common to all professionals?                                      | The numeric ID, the name and the working days. Those three fields live in `HealthProfessional`; anything else (clinic, ward, specialty, focus area) is pushed down to the sub-type, because it is not true of every professional.                                                                                                                                                        |
+| The working days are "a fixed collection of values" — how to store them?            | In an `enum`, `Weekday`. Free-text days would let a caller write "Fridy" or "MONDAY" and the timetable would silently disagree with the roster; an enum makes the set of legal values part of the type, and it keeps the printing consistent.                                                                                                                                            |
 | External code must read the data but must never put an object into an invalid state | Every field is `private final`; access is read-only through getters. `getWorkingDays()` returns a **copy**, so a caller cannot mutate the roster. The only way to build an object is a constructor that validates its arguments (positive ID, non-blank name, at least one day, no `null` days, duplicates removed). There are therefore no setters that could later break an invariant. |
-| Printing an object should show all details in a readable form | `toString()` is implemented once in the base class: it prints the role, the shared data and then calls `getSpecialistDetails()`, so one `println(professional)` gives a complete, aligned line. |
-| Is a second constructor worthwhile? | Yes. `HealthProfessional(id, name)` defaults to Monday–Friday, because a full-time professional is the common case. It is implemented with `this(...)` (constructor chaining), so the validation still runs in exactly one place. |
+| Printing an object should show all details in a readable form                       | `toString()` is implemented once in the base class: it prints the role, the shared data and then calls `getSpecialistDetails()`, so one `println(professional)` gives a complete, aligned line.                                                                                                                                                                                          |
+| Is a second constructor worthwhile?                                                 | Yes. `HealthProfessional(id, name)` defaults to Monday–Friday, because a full-time professional is the common case. It is implemented with `this(...)` (constructor chaining), so the validation still runs in exactly one place.                                                                                                                                                        |
 
 ### Part 2 — Specialising health professionals
 
-| Design question | Decision and why |
-|---|---|
-| What relationship lets the sub-types reuse the common code? | Inheritance: `GeneralPractitioner`, `Nurse`, `Surgeon` and `Dietitian` all `extend HealthProfessional`. The ID/name/roster fields and the printing logic exist once. Adding a fifth type later means adding one class and changing nothing else in the system. |
-| How is the shared information plus the type-specific information set up correctly? | Every sub-type constructor calls `super(id, name, workingDays)` as its first statement, then validates and stores its own extra field. The parent's validation cannot be skipped or duplicated. |
-| How does a sub-type present its combined details? | It overrides `getRole()` (so the object names its own type) and `getSpecialistDetails()` (its own extra data); the base `toString()` assembles both. No sub-type has to repeat the shared part of the output. |
-| How do different types behave when treated through the same general type? | Polymorphism: `AssignmentOne` stores them all in one `ArrayList<HealthProfessional>` and prints them with one loop. The loop never asks "which type are you?" — each object describes itself. That is also why the code would barely change if another professional type were added. |
-| Should a plain/generic professional be creatable? | No. `HealthProfessional` is `abstract`, so `new HealthProfessional(...)` does not compile, and each sub-type must supply `getRole()` and `getSpecialistDetails()`. This forces every professional in the system to state what kind of professional it is. |
+| Design question                                                                    | Decision and why                                                                                                                                                                                                                                                                     |
+| ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| What relationship lets the sub-types reuse the common code?                        | Inheritance: `GeneralPractitioner`, `Nurse`, `Surgeon` and `Dietitian` all `extend HealthProfessional`. The ID/name/roster fields and the printing logic exist once. Adding a fifth type later means adding one class and changing nothing else in the system.                       |
+| How is the shared information plus the type-specific information set up correctly? | Every sub-type constructor calls `super(id, name, workingDays)` as its first statement, then validates and stores its own extra field. The parent's validation cannot be skipped or duplicated.                                                                                      |
+| How does a sub-type present its combined details?                                  | It overrides `getRole()` (so the object names its own type) and `getSpecialistDetails()` (its own extra data); the base `toString()` assembles both. No sub-type has to repeat the shared part of the output.                                                                        |
+| How do different types behave when treated through the same general type?          | Polymorphism: `AssignmentOne` stores them all in one `ArrayList<HealthProfessional>` and prints them with one loop. The loop never asks "which type are you?" — each object describes itself. That is also why the code would barely change if another professional type were added. |
+| Should a plain/generic professional be creatable?                                  | No. `HealthProfessional` is `abstract`, so `new HealthProfessional(...)` does not compile, and each sub-type must supply `getRole()` and `getSpecialistDetails()`. This forces every professional in the system to state what kind of professional it is.                            |
 
 ### Part 3 — Working with health professional objects
 
@@ -164,32 +168,32 @@ Three general practitioners plus one or two of every other type are created in
 
 ### Part 4 — Modelling an appointment
 
-| Design question | Decision and why |
-|---|---|
-| Should a patient be its own class? | Yes — `Patient`. A name and a mobile number always travel together and an appointment is only valid when both are present, so the validation rule is written once. It also gives Part 5 a precise way to decide "same patient" (`Patient.equals` compares mobile numbers). |
-| What information does an appointment hold? | The `Patient` object, the `HealthProfessional` object, the time slot and, optionally, the reason for the visit (`symptom`). The professional is stored as the **base type**, so any sub-type can be booked with no extra code. |
-| How is an incomplete or invalid appointment made impossible? | The constructor rejects a `null` patient, a `null` professional and any time that is not a real 24-hour `HH:mm` value. There is no setter, so once created the appointment cannot be damaged. This rule is demonstrated in `demonstrateValidation()`. |
-| Why is the symptom optional rather than required? | A patient who cannot name their problem should still be able to book. A blank symptom is normalised to `"Not recorded"` by `normalizeSymptom()`, so the field is never `null` and never breaks printing, while a missing symptom does not block a booking. The three-argument constructor delegates to the four-argument one, so the graded demonstration works exactly as before and the extra detail stays optional. |
-| How is the professional's own detail shown? | `Appointment.getDetails()` delegates to `healthProfessional.toString()`, so the appointment class needs no knowledge of the professional types. |
-| How can a collection be sorted earliest to latest? | `Appointment implements Comparable<Appointment>` and compares time slots as text. Because `"HH:mm"` is fixed-width and zero-padded, alphabetical order is chronological order — no parsing, and the comparison is correct for any timetable the clinic chooses. Ties at the same time are broken by professional ID so output is reproducible. |
-| How should the time be stored? | As a `"HH:mm"` string, not as an `int` or a `Date`: it prints exactly as the clinic speaks, it sorts correctly, and it avoids any time-zone or calendar machinery the unit has not covered. |
+| Design question                                              | Decision and why                                                                                                                                                                                                                                                                                                                                                                                                       |
+| ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Should a patient be its own class?                           | Yes — `Patient`. A name and a mobile number always travel together and an appointment is only valid when both are present, so the validation rule is written once. It also gives Part 5 a precise way to decide "same patient" (`Patient.equals` compares mobile numbers).                                                                                                                                             |
+| What information does an appointment hold?                   | The `Patient` object, the `HealthProfessional` object, the time slot and, optionally, the reason for the visit (`symptom`). The professional is stored as the **base type**, so any sub-type can be booked with no extra code.                                                                                                                                                                                         |
+| How is an incomplete or invalid appointment made impossible? | The constructor rejects a `null` patient, a `null` professional and any time that is not a real 24-hour `HH:mm` value. There is no setter, so once created the appointment cannot be damaged. This rule is demonstrated in `demonstrateValidation()`.                                                                                                                                                                  |
+| Why is the symptom optional rather than required?            | A patient who cannot name their problem should still be able to book. A blank symptom is normalised to `"Not recorded"` by `normalizeSymptom()`, so the field is never `null` and never breaks printing, while a missing symptom does not block a booking. The three-argument constructor delegates to the four-argument one, so the graded demonstration works exactly as before and the extra detail stays optional. |
+| How is the professional's own detail shown?                  | `Appointment.getDetails()` delegates to `healthProfessional.toString()`, so the appointment class needs no knowledge of the professional types.                                                                                                                                                                                                                                                                        |
+| How can a collection be sorted earliest to latest?           | `Appointment implements Comparable<Appointment>` and compares time slots as text. Because `"HH:mm"` is fixed-width and zero-padded, alphabetical order is chronological order — no parsing, and the comparison is correct for any timetable the clinic chooses. Ties at the same time are broken by professional ID so output is reproducible.                                                                         |
+| How should the time be stored?                               | As a `"HH:mm"` string, not as an `int` or a `Date`: it prints exactly as the clinic speaks, it sorts correctly, and it avoids any time-zone or calendar machinery the unit has not covered.                                                                                                                                                                                                                            |
 
 ### Part 5 — Managing the collection of appointments
 
 `AppointmentManager` owns a single private `ArrayList<Appointment>` and exposes only
 operations:
 
-| Requirement | Implementation |
-|---|---|
-| Add an appointment, ensuring required information is present | `addAppointment(patient, professional, timeSlot, symptom)` checks in the order a receptionist would: patient → professional → is the time a real clinic slot → is the professional free at that time → create the object. Each failure returns a `WARNING:` message; success returns a `SUCCESS:` message. The three-argument overload delegates to this one, so there is a single place where the checks live. |
-| Reject double-booking of the same professional | Before adding, it searches for an existing appointment with the **same professional ID and the same time slot**. Two different professionals at 09:00 are still allowed, which the demonstration shows. |
-| How is the no-double-booking rule actually guaranteed? | The rule lives in one place, `AppointmentManager.addAppointment(...)`, and is reached by every route into the collection: the interactive desk, the restored save file, and the graded demonstration. Around it sit two early guards that only improve the conversation — the desk prints each professional's `free` / `booked` slots and re-prompts while the time is taken, and the save file's lines are re-booked through the same manager, so a hand-edited file cannot create a clash. Cancelling frees the slot again immediately, which is why `09:00` reappears in `free` after a cancellation. |
-| View and filter | `getAllAppointments()` (defensive copy), `filterByProfessionalId(int)`, `filterByPatientMobile(String)`. Both filters return new lists and leave the manager untouched. |
-| Sort, for all or a filtered subset | `sortAllAppointments()` sorts the stored list; `sortAppointments(list)` sorts any filtered list in place. The demonstration does both. |
-| Cancel | `cancelAppointment(professionalId, timeSlot)` and `cancelAppointmentsForPatient(mobile)`. Cancelling something that does not exist returns a warning rather than throwing, because a receptionist typing an unused slot is normal, not a bug. |
-| Warning message when an action cannot be performed | Every operation returns a `String` beginning with `SUCCESS:` or `WARNING:`, so the caller can print it directly and the user always learns what happened and why. |
-| Why an `ArrayList`? | The clinic needs ordered storage, index-based removal and repeated iteration — the operations an `ArrayList` does well, and no key-based lookup is required. Appointments are found by scanning, which is entirely adequate for one day of bookings. |
-| Which data structure for the timetable? | `ClinicSchedule`, built from a start time, a closing time and an interval. It generates the slot list once and answers `isAvailableSlot(...)`. Changing the clinic's hours means changing three values in one place; the manager, the appointment class and every operation keep working. |
+| Requirement                                                  | Implementation                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| ------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Add an appointment, ensuring required information is present | `addAppointment(patient, professional, timeSlot, symptom)` checks in the order a receptionist would: patient → professional → is the time a real clinic slot → is the professional free at that time → create the object. Each failure returns a `WARNING:` message; success returns a `SUCCESS:` message. The three-argument overload delegates to this one, so there is a single place where the checks live.                                                                                                                                                                                          |
+| Reject double-booking of the same professional               | Before adding, it searches for an existing appointment with the **same professional ID and the same time slot**. Two different professionals at 09:00 are still allowed, which the demonstration shows.                                                                                                                                                                                                                                                                                                                                                                                                  |
+| How is the no-double-booking rule actually guaranteed?       | The rule lives in one place, `AppointmentManager.addAppointment(...)`, and is reached by every route into the collection: the interactive desk, the restored save file, and the graded demonstration. Around it sit two early guards that only improve the conversation — the desk prints each professional's `free` / `booked` slots and re-prompts while the time is taken, and the save file's lines are re-booked through the same manager, so a hand-edited file cannot create a clash. Cancelling frees the slot again immediately, which is why `09:00` reappears in `free` after a cancellation. |
+| View and filter                                              | `getAllAppointments()` (defensive copy), `filterByProfessionalId(int)`, `filterByPatientMobile(String)`. Both filters return new lists and leave the manager untouched.                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| Sort, for all or a filtered subset                           | `sortAllAppointments()` sorts the stored list; `sortAppointments(list)` sorts any filtered list in place. The demonstration does both.                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| Cancel                                                       | `cancelAppointment(professionalId, timeSlot)` and `cancelAppointmentsForPatient(mobile)`. Cancelling something that does not exist returns a warning rather than throwing, because a receptionist typing an unused slot is normal, not a bug.                                                                                                                                                                                                                                                                                                                                                            |
+| Warning message when an action cannot be performed           | Every operation returns a `String` beginning with `SUCCESS:` or `WARNING:`, so the caller can print it directly and the user always learns what happened and why.                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| Why an `ArrayList`?                                          | The clinic needs ordered storage, index-based removal and repeated iteration — the operations an `ArrayList` does well, and no key-based lookup is required. Appointments are found by scanning, which is entirely adequate for one day of bookings.                                                                                                                                                                                                                                                                                                                                                     |
+| Which data structure for the timetable?                      | `ClinicSchedule`, built from a start time, a closing time and an interval. It generates the slot list once and answers `isAvailableSlot(...)`. Changing the clinic's hours means changing three values in one place; the manager, the appointment class and every operation keep working.                                                                                                                                                                                                                                                                                                                |
 
 **One documented decision about the closing time:** 08:00–16:00 with 30-minute
 intervals produces 16 bookable start times, 08:00 … 15:30. The closing time is treated
@@ -226,12 +230,12 @@ Both the normal and the error path are therefore exercised, which is what the ru
 
 ## 5. The four pillars of OOP, located in the code
 
-| Pillar | Where it lives | Why it was used there |
-|---|---|---|
-| **Abstraction** | `HealthProfessional` is `abstract`, with the abstract methods `getRole()` and `getSpecialistDetails()`. `AppointmentManager` hides its `ArrayList` behind `addAppointment`, `filter...`, `sort...` and `cancel...`. `ClinicSchedule` hides how slots are generated behind `isAvailableSlot`. | Callers deal with *what* a professional or a booking is, never with the internal bookkeeping. Making the base class abstract also makes "a professional with no specialty" impossible to create, which is stronger than a comment saying "do not do this". |
-| **Encapsulation** | Every field in every class is `private` (and `final` where it should never change); access is through getters, collections are returned as copies, and constructors validate. | Objects can only ever hold valid data, so no other class has to defend against a half-built professional or an appointment with no patient. If the internal storage of appointments ever changes, only `AppointmentManager` changes. |
-| **Inheritance** | The four sub-types extend `HealthProfessional` and call `super(...)`; `Appointment` implements `Comparable`; `Patient`/`HealthProfessional` share data with `equals`/`hashCode`. | The common data (ID, name, roster) and the common behaviour (`toString`, `equals`) are declared once. Adding a physiotherapist later is one new class, not a copy of the professional code. |
-| **Polymorphism** | `AssignmentOne` stores one `ArrayList<HealthProfessional>` holding four different types, prints them with one loop, and books appointments through the base type; `Appointment.getDetails()` calls the professional's overridden `toString()`; `Collections.sort` calls `Appointment.compareTo`. | The management code is written once for the general type, yet each object still behaves according to its own sub-type. This is what keeps the booking code independent of how many professional types exist. |
+| Pillar            | Where it lives                                                                                                                                                                                                                                                                                   | Why it was used there                                                                                                                                                                                                                                      |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Abstraction**   | `HealthProfessional` is `abstract`, with the abstract methods `getRole()` and `getSpecialistDetails()`. `AppointmentManager` hides its `ArrayList` behind `addAppointment`, `filter...`, `sort...` and `cancel...`. `ClinicSchedule` hides how slots are generated behind `isAvailableSlot`.     | Callers deal with *what* a professional or a booking is, never with the internal bookkeeping. Making the base class abstract also makes "a professional with no specialty" impossible to create, which is stronger than a comment saying "do not do this". |
+| **Encapsulation** | Every field in every class is `private` (and `final` where it should never change); access is through getters, collections are returned as copies, and constructors validate.                                                                                                                    | Objects can only ever hold valid data, so no other class has to defend against a half-built professional or an appointment with no patient. If the internal storage of appointments ever changes, only `AppointmentManager` changes.                       |
+| **Inheritance**   | The four sub-types extend `HealthProfessional` and call `super(...)`; `Appointment` implements `Comparable`; `Patient`/`HealthProfessional` share data with `equals`/`hashCode`.                                                                                                                 | The common data (ID, name, roster) and the common behaviour (`toString`, `equals`) are declared once. Adding a physiotherapist later is one new class, not a copy of the professional code.                                                                |
+| **Polymorphism**  | `AssignmentOne` stores one `ArrayList<HealthProfessional>` holding four different types, prints them with one loop, and books appointments through the base type; `Appointment.getDetails()` calls the professional's overridden `toString()`; `Collections.sort` calls `Appointment.compareTo`. | The management code is written once for the general type, yet each object still behaves according to its own sub-type. This is what keeps the booking code independent of how many professional types exist.                                               |
 
 ---
 
@@ -256,41 +260,49 @@ of it — the brief warns that an interview may be requested.
 
 ## 7. Submission checklist
 
-- [ ] Project folder renamed to `A1-<username>` and zipped as `A1-<username>.zip`.
-- [ ] GitHub repository created; code committed **progressively** (see the commit plan
-      below), with the repository link added to the submission comments. If private,
-      invite the tutor and unit assessor as collaborators.
+- [ ] Project folder is named `A1-Yanxin Wu`; zip it as `A1-Yanxin-Wu.zip` containing
+  `src/`, `README.md`, `sample-output.txt`, `wakatime/A1-Yanxin-Wu-WakaTime.png`
+  (no `bin/`, no `.vscode/`, no `.idea/`, no `appointments.txt`).
+- [ ] GitHub repository created; code committed **progressively** (see the commit history
+  below), with the repository link added to the submission comments. If private,
+  invite the tutor and unit assessor as collaborators.
 
 Repository used for this submission: <https://github.com/wanze07/A1-Yanxin-Wu> (public,
 branch `main`, one commit per Part so the progression is visible).
-- [ ] WakaTime report screenshot/PDF attached (`A1-username-WakaTime.png`).
+
+- [ ] WakaTime report screenshot attached (`wakatime/A1-Yanxin-Wu-WakaTime.png`).
 - [ ] Video (≤ 5 minutes) uploaded to SCU OneDrive, shareable link added to comments.
 - [ ] GenAI declaration added to the comments.
-- [ ] Submitted before Monday 16 November 2026, 11:59 pm.
+- [ ] Submitted before Monday 16 November 2026, 11:59 pm
 
-### Suggested commit plan (shows incremental progress)
+### Commit history in this repository (shows incremental progress)
+
+Fifteen commits, one per working step rather than a single upload:
 
 ```
-Part 1: add Weekday enum and abstract HealthProfessional with validated constructors
-Part 2: add GeneralPractitioner, Nurse, Surgeon and Dietitian sub-types
-Part 3: print all professionals through one polymorphic loop
-Part 4: add Patient, ClinicSchedule and Appointment with Comparable
-Part 4: reject invalid appointments in the constructor
-Part 5: add AppointmentManager with book, filter, sort and cancel
-Part 6: demonstrate normal and error cases in AssignmentOne
-Docs: add README with design decisions
+23568b7 Project setup: ignore build output
+10a4d88 Part 1: abstract HealthProfessional and the Weekday enum
+0fd747a Part 2: four concrete professional types including GeneralPractitioner
+909d310 Part 4: Patient with validated name and mobile number
+53481ee Part 4: ClinicSchedule generating the 08:00-16:00 half-hour timetable
+d9652f3 Part 4: Appointment with time validation and natural ordering
+e874082 Part 5: AppointmentManager add, filter, sort and cancel operations
+c32195c Part 3 and Part 6: create professionals and demonstrate every scenario
+9cfd5f1 Extra: interactive front desk and optional symptom field
+fff0731 Docs and IDE configuration: README, sample output, VS Code and IntelliJ setup
+79bc810 Docs: record the GitHub repository link
+d7826fd Extra: save every booking to appointments.txt and restore it on start
+fcb43ad Extra: preview the demonstration examples instead of adding them to the user's list
+e68cb37 Docs: explain how the double-booking rule is enforced
+d87329b Set the author name in Javadoc and clear the remaining IDE hints
 ```
 
-### Video outline (5 minutes)
+### Evidence of development time
 
-| Time | Content |
-|---|---|
-| 0:00–0:30 | What the system is: booking backbone for one clinic day; the classes on screen. |
-| 0:30–1:30 | **Abstraction + Inheritance**: why `HealthProfessional` is abstract, how each sub-type calls `super(...)` and overrides `getRole()`. |
-| 1:30–2:30 | **Encapsulation**: private final fields, validated constructors, defensive copies, no setters. |
-| 2:30–3:30 | **Polymorphism**: the single loop over `ArrayList<HealthProfessional>`, and why adding a new type changes nothing else. |
-| 3:30–4:30 | Run the program: bookings, double-booking warning, invalid slot, sorting, filtering, cancellation and the "nothing to cancel" warning. |
-| 4:30–5:00 | Design choices worth defending: enum for days, `"HH:mm"` strings for sorting, `ClinicSchedule` for flexibility, warnings instead of exceptions. |
+![WakaTime dashboard: 25 hrs 11 mins over the last 7 days](wakatime/A1-Yanxin-Wu-WakaTime.png)
+
+The full dashboard is also kept as a separate file, `wakatime/A1-Yanxin-Wu-WakaTime.png`,
+to attach to the submission comments.
 
 ---
 
@@ -311,13 +323,14 @@ git-ignored; delete it to start from an empty desk. Choose **2** to print every 
 you have entered, earliest first.
 
 What you can type, in this order, when booking:
-| Prompt | Example | Why it is asked there |
-|---|---|---|
-| Patient name | `Tom Wilson` | Stored by `Patient`, which rejects a blank name. |
-| Patient mobile | `0400 111 222` or `0400111222` | Spaces are removed, digits only, 8–15 digits. A bad number is refused and the prompt repeats. |
-| Symptom or reason | `headache and fever` | Optional; press Enter and the appointment records `"Not recorded"`. |
-| Professional ID | `101` | The staff list is printed first. An unknown ID is refused and the prompt repeats. |
-| Time slot | `09:00` | The professional's free and booked slots are listed first; a slot outside the timetable or already taken by that professional is refused. |
+
+| Prompt            | Example                        | Why it is asked there                                                                                                                     |
+| ----------------- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| Patient name      | `Tom Wilson`                   | Stored by `Patient`, which rejects a blank name.                                                                                          |
+| Patient mobile    | `0400 111 222` or `0400111222` | Spaces are removed, digits only, 8–15 digits. A bad number is refused and the prompt repeats.                                             |
+| Symptom or reason | `headache and fever`           | Optional; press Enter and the appointment records `"Not recorded"`.                                                                       |
+| Professional ID   | `101`                          | The staff list is printed first. An unknown ID is refused and the prompt repeats.                                                         |
+| Time slot         | `09:00`                        | The professional's free and booked slots are listed first; a slot outside the timetable or already taken by that professional is refused. |
 
 The menu also offers: all appointments in time order, appointments of one professional,
 appointments of one patient, a symptom keyword search, cancelling one appointment by
