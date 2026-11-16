@@ -278,7 +278,7 @@ branch `main`, code committed step by step so the progression is visible).
 - [ ] Submitted before Monday 16 November 2026, 11:59 pm
 
 **Video link (SCU OneDrive, sign-in with an SCU account required):**
-<https://scuonline-my.sharepoint.com/:v:/g/personal/y_wu_81_student_scu_edu_au/IQB-tuMlCxxcSI6ApWuvvg8lAd_29n2VGjgH9pSkmaUKMiQ?e=P8NBCl>
+<https://scuonline-my.sharepoint.com/:v:/g/personal/y_wu_81_student_scu_edu_au/IQB-tuMlCxxcSI6ApWuvvg8lAd_29n2VGjgH9pSkmaUKMiQ?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=P8NBCl>
 
 ### Commit history in this repository (shows incremental progress)
 
